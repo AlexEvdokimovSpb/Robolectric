@@ -24,6 +24,9 @@ class SearchPresenterTest {
     @Mock
     private lateinit var viewContract: ViewSearchContract
 
+    @Mock
+    private lateinit var viewContract2: ViewSearchContract
+
     @Before
     fun setUp() {
         //Обязательно для аннотаций "@Mock"
@@ -148,5 +151,18 @@ class SearchPresenterTest {
 
         //Убеждаемся, что ответ от сервера обрабатывается корректно
         verify(viewContract, times(1)).displaySearchResults(searchResults, 101)
+    }
+
+    @Test
+    fun `should view is viewContract2`() {
+        val expected = viewContract2
+        presenter.onAttach(viewContract2)
+        assertEquals(expected, presenter.viewContract)
+    }
+
+    @Test
+    fun `should view is null`() {
+        presenter.onDetach()
+        assertNull(presenter.viewContract)
     }
 }
