@@ -124,7 +124,7 @@ class MainActivityTest {
             onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 42")))
         } else {
             onView(isRoot()).perform(delay())
-            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2627")))
+            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2630")))
         }
     }
 
