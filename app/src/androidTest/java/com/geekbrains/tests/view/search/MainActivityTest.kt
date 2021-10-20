@@ -16,7 +16,6 @@ import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.geekbrains.tests.BuildConfig
 import com.geekbrains.tests.R
-import com.geekbrains.tests.view.search.MainActivity
 import junit.framework.TestCase
 import org.hamcrest.Matcher
 import org.junit.After
@@ -74,7 +73,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun activitytoDetailsActivityButton_NotNull() {
+    fun activityDetailsActivityButton_NotNull() {
         scenario.onActivity {
             val totalCountTextView = it.findViewById<Button>(R.id.toDetailsActivityButton)
             TestCase.assertNotNull(totalCountTextView)
@@ -94,7 +93,8 @@ class MainActivityTest {
 
     @Test
     fun activityDetailsActivityButton_AreEffectiveVisible() {
-        onView(withId(R.id.toDetailsActivityButton)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
+        onView(withId(R.id.toDetailsActivityButton)).check(matches(withEffectiveVisibility(
+            Visibility.VISIBLE)))
     }
 
     @Test
@@ -106,7 +106,7 @@ class MainActivityTest {
     }
 
     @Test
-    fun activityTextViewn_IsCompletelyDisplayed() {
+    fun activityTextView_IsCompletelyDisplayed() {
         onView(withId(R.id.searchEditText)).perform(click())
         onView(withId(R.id.searchEditText)).perform(replaceText("42"), closeSoftKeyboard())
         onView(withId(R.id.searchEditText)).perform(pressImeActionButton())
@@ -137,8 +137,6 @@ class MainActivityTest {
             }
         }
     }
-
-
 
     @After
     fun close() {

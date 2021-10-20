@@ -72,11 +72,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
     }
 
     private fun createRepository(): RepositoryContract {
-        return if (BuildConfig.TYPE == FAKE) {
-            FakeGitHubRepository()
-        } else {
-            GitHubRepository(createRetrofit().create(GitHubApi::class.java))
-        }
+        return FakeGitHubRepository()
     }
 
     private fun createRetrofit(): Retrofit {
@@ -88,7 +84,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
 
     override fun displaySearchResults(
         searchResults: List<SearchResult>,
-        totalCount: Int
+        totalCount: Int,
     ) {
         with(totalCountTextView) {
             visibility = View.VISIBLE
