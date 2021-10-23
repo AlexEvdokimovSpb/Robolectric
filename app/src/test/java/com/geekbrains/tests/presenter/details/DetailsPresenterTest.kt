@@ -1,5 +1,6 @@
 package com.geekbrains.tests.presenter.details
 
+import com.geekbrains.tests.TEST_NUMBER
 import com.geekbrains.tests.view.details.ViewDetailsContract
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
@@ -33,14 +34,14 @@ class DetailsPresenterTest {
 
     @Test
     fun `verify viewContract has setCount()`() {
-        viewContract.setCount(42)
-        verify(viewContract, times(1)).setCount(42)
+        viewContract.setCount(TEST_NUMBER)
+        verify(viewContract, times(1)).setCount(TEST_NUMBER)
     }
 
     @Test
     fun `should be a set number`() {
-        val expected = 42
-        presenter.setCounter(42)
+        val expected = TEST_NUMBER
+        presenter.setCounter(TEST_NUMBER)
         val actual = presenter.count
         assertEquals(expected, actual)
     }
