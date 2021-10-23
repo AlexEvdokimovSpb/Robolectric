@@ -73,6 +73,46 @@ class MainActivityTest {
     }
 
     @Test
+    fun activityStartSearchButton_NotNull() {
+        scenario.onActivity {
+            val totalCountTextView = it.findViewById<Button>(R.id.startSearch)
+            TestCase.assertNotNull(totalCountTextView)
+        }
+    }
+
+    @Test
+    fun activityStartSearchButton_HasText() {
+        val assertion = matches(withText("Search"))
+        onView(withId(R.id.startSearch)).check(assertion)
+    }
+
+
+    @Test
+    fun activityStartSearchButton_IsCompletelyDisplayed() {
+        onView(withId(R.id.startSearch)).check(matches(isCompletelyDisplayed()))
+    }
+
+    @Test
+    fun activityStartSearchButton_AreEffectiveVisible() {
+        onView(withId(R.id.startSearch)).check(matches(withEffectiveVisibility(
+            Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun activityStartSearchButton_IsWorking() {
+        onView(withId(R.id.searchEditText)).perform(click())
+        onView(withId(R.id.searchEditText)).perform(replaceText("algol"), closeSoftKeyboard())
+        onView(withId(R.id.searchEditText)).perform(pressImeActionButton())
+
+        if (BuildConfig.TYPE == MainActivity.FAKE) {
+            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 42")))
+        } else {
+            onView(isRoot()).perform(delay())
+            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2638")))
+        }
+    }
+
+    @Test
     fun activityDetailsActivityButton_NotNull() {
         scenario.onActivity {
             val totalCountTextView = it.findViewById<Button>(R.id.toDetailsActivityButton)
@@ -124,7 +164,7 @@ class MainActivityTest {
             onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 42")))
         } else {
             onView(isRoot()).perform(delay())
-            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2630")))
+            onView(withId(R.id.totalCountTextView)).check(matches(withText("Number of results: 2638")))
         }
     }
 
