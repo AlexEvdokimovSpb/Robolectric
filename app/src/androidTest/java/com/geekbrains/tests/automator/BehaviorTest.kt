@@ -10,7 +10,10 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
-import com.geekbrains.tests.BuildConfig
+import com.geekbrains.tests.*
+import com.geekbrains.tests.TEST_NUMBER_OF_RESULTS_42
+import com.geekbrains.tests.TEST_NUMBER_OF_RESULTS_MINUS_1
+import com.geekbrains.tests.TEST_NUMBER_OF_RESULTS_PLUS_1
 import com.geekbrains.tests.view.search.MainActivity
 import org.junit.Assert
 import org.junit.Before
@@ -86,7 +89,7 @@ class BehaviorTest {
         //Убеждаемся, что сервер вернул корректный результат. Обратите внимание, что количество
         //результатов может варьироваться во времени, потому что количество репозиториев постоянно меняется.
         if (BuildConfig.TYPE == MainActivity.FAKE) {
-            Assert.assertEquals(changedText.text.toString(), "Number of results: 42")
+            Assert.assertEquals(changedText.text.toString(), TEST_NUMBER_OF_RESULTS_42)
         } else {
             Assert.assertEquals(changedText.text.toString(), "Number of results: 684")
         }
@@ -117,7 +120,7 @@ class BehaviorTest {
         //так как мы кликаем по кнопке не отправляя никаких поисковых запросов.
         //Чтобы проверить отображение определенного количества репозиториев,
         //вам в одном и том же методе нужно отправить запрос на сервер и открыть DetailsScreen.
-        Assert.assertEquals(changedText.text, "Number of results: 0")
+        Assert.assertEquals(changedText.text, TEST_NUMBER_OF_RESULTS_ZERO)
     }
 
     @Test
@@ -145,7 +148,7 @@ class BehaviorTest {
                 TIMEOUT
             )
         if (BuildConfig.TYPE == MainActivity.FAKE) {
-            Assert.assertEquals(changedText.text.toString(), "Number of results: 42")
+            Assert.assertEquals(changedText.text.toString(), TEST_NUMBER_OF_RESULTS_42)
         } else {
             Assert.assertEquals(changedText.text.toString(), "Number of results: 684")
         }
@@ -260,7 +263,8 @@ class BehaviorTest {
                 Until.findObject(By.res(packageName, "totalCountTextView2")),
                 TIMEOUT
             )
-        Assert.assertEquals(changedText.text.toString(), "Number of results: 1")
+        Assert.assertEquals(changedText.text.toString(), TEST_NUMBER_OF_RESULTS_PLUS_1
+        )
     }
 
     @Test
@@ -288,7 +292,7 @@ class BehaviorTest {
                 Until.findObject(By.res(packageName, "totalCountTextView2")),
                 TIMEOUT
             )
-        Assert.assertEquals(changedText.text.toString(), "Number of results: -1")
+        Assert.assertEquals(changedText.text.toString(), TEST_NUMBER_OF_RESULTS_MINUS_1)
     }
 
     companion object {
