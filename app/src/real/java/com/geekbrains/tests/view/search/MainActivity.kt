@@ -40,6 +40,16 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         toDetailsActivityButton.setOnClickListener {
             startActivity(DetailsActivity.getIntent(this, totalCount))
         }
+        startSearch.setOnClickListener {
+            with(totalCountTextView) {
+                getAnswer()
+                visibility = View.VISIBLE
+                text =
+                    String.format(Locale.getDefault(),
+                        getString(R.string.results_count),
+                        totalCount)
+            }
+        }
         setQueryListener()
         setRecyclerView()
     }
@@ -67,6 +77,19 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
             }
             false
         })
+    }
+
+    private fun getAnswer() {
+        val query = searchEditText.text.toString()
+        if (query.isNotBlank()) {
+            presenter.searchGitHub(query)
+        } else {
+            Toast.makeText(
+                this@MainActivity,
+                getString(R.string.enter_search_word),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
     }
 
     private fun createRepository(): RepositoryContract {
