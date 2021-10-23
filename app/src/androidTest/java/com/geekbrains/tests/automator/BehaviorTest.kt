@@ -3,9 +3,6 @@ package com.geekbrains.tests.automator
 import android.content.Context
 import android.content.Intent
 import androidx.test.core.app.ApplicationProvider
-import androidx.test.espresso.Espresso
-import androidx.test.espresso.action.ViewActions
-import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.SdkSuppress
 import androidx.test.platform.app.InstrumentationRegistry.getInstrumentation
@@ -13,7 +10,8 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.UiObject2
 import androidx.test.uiautomator.Until
-import com.geekbrains.tests.R
+import com.geekbrains.tests.BuildConfig
+import com.geekbrains.tests.view.search.MainActivity
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
@@ -66,9 +64,17 @@ class BehaviorTest {
         val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
         //Устанавливаем значение
         editText.text = "UiAutomator"
-        //Отправляем запрос через Espresso
-        Espresso.onView(ViewMatchers.withId(R.id.searchEditText))
-            .perform(ViewActions.pressImeActionButton())
+        /*   //Отправляем запрос через Espresso
+           Espresso.onView(ViewMatchers.withId(R.id.searchEditText))
+               .perform(ViewActions.pressImeActionButton())*/
+
+        val startSearch: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "startSearch"
+            )
+        )
+        startSearch.click()
 
         //Ожидаем конкретного события: появления текстового поля totalCountTextView.
         //Это будет означать, что сервер вернул ответ с какими-то данными, то есть запрос отработал.
@@ -79,7 +85,11 @@ class BehaviorTest {
             )
         //Убеждаемся, что сервер вернул корректный результат. Обратите внимание, что количество
         //результатов может варьироваться во времени, потому что количество репозиториев постоянно меняется.
-        Assert.assertEquals(changedText.text.toString(), "Number of results: 668")
+        if (BuildConfig.TYPE == MainActivity.FAKE) {
+            Assert.assertEquals(changedText.text.toString(), "Number of results: 42")
+        } else {
+            Assert.assertEquals(changedText.text.toString(), "Number of results: 684")
+        }
     }
 
     //Убеждаемся, что DetailsScreen открывается
@@ -99,7 +109,7 @@ class BehaviorTest {
         //Это будет означать, что DetailsScreen открылся и это поле видно на экране.
         val changedText =
             uiDevice.wait(
-                Until.findObject(By.res(packageName, "totalCountTextView")),
+                Until.findObject(By.res(packageName, "totalCountTextView2")),
                 TIMEOUT
             )
         //Убеждаемся, что поле видно и содержит предполагаемый текст.
@@ -110,7 +120,178 @@ class BehaviorTest {
         Assert.assertEquals(changedText.text, "Number of results: 0")
     }
 
+    @Test
+    fun test_OpenDetailsScreenAndResultIsPositive() {
+        val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
+        editText.text = "UiAutomator"
+        val startSearch: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "startSearch"
+            )
+        )
+        startSearch.click()
+        TIMEOUT
+        val toDetails: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "toDetailsActivityButton"
+            )
+        )
+        toDetails.click()
+        val changedText =
+            uiDevice.wait(
+                Until.findObject(By.res(packageName, "totalCountTextView2")),
+                TIMEOUT
+            )
+        if (BuildConfig.TYPE == MainActivity.FAKE) {
+            Assert.assertEquals(changedText.text.toString(), "Number of results: 42")
+        } else {
+            Assert.assertEquals(changedText.text.toString(), "Number of results: 684")
+        }
+    }
+
+    @Test
+    fun test_SearchThenOpenDetailsScreenAndIncrement() {
+        val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
+        editText.text = "UiAutomator"
+        val startSearch: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "startSearch"
+            )
+        )
+        startSearch.click()
+        TIMEOUT
+        val toDetails: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "toDetailsActivityButton"
+            )
+        )
+        toDetails.click()
+        uiDevice.wait(
+            Until.findObject(By.res(packageName, "totalCountTextView2")),
+            TIMEOUT
+        )
+        val increment: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "incrementButton"
+            )
+        )
+        increment.click()
+        val changedText =
+            uiDevice.wait(
+                Until.findObject(By.res(packageName, "totalCountTextView2")),
+                TIMEOUT
+            )
+        if (BuildConfig.TYPE == MainActivity.FAKE) {
+            Assert.assertEquals(changedText.text.toString(), "Number of results: 43")
+        } else {
+            Assert.assertEquals(changedText.text.toString(), "Number of results: 685")
+        }
+    }
+
+    @Test
+    fun test_SearchThenOpenDetailsScreenAndDecrement() {
+        val editText = uiDevice.findObject(By.res(packageName, "searchEditText"))
+        editText.text = "UiAutomator"
+        val startSearch: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "startSearch"
+            )
+        )
+        startSearch.click()
+        TIMEOUT
+        val toDetails: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "toDetailsActivityButton"
+            )
+        )
+        toDetails.click()
+        uiDevice.wait(
+            Until.findObject(By.res(packageName, "totalCountTextView2")),
+            TIMEOUT
+        )
+        val decrement: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "decrementButton"
+            )
+        )
+        decrement.click()
+        val changedText =
+            uiDevice.wait(
+                Until.findObject(By.res(packageName, "totalCountTextView2")),
+                TIMEOUT
+            )
+        if (BuildConfig.TYPE == MainActivity.FAKE) {
+            Assert.assertEquals(changedText.text.toString(), "Number of results: 41")
+        } else {
+            Assert.assertEquals(changedText.text.toString(), "Number of results: 683")
+        }
+    }
+
+    @Test
+    fun test_OpenDetailsScreenAndIncrement() {
+        val toDetails: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "toDetailsActivityButton"
+            )
+        )
+        toDetails.click()
+        uiDevice.wait(
+            Until.findObject(By.res(packageName, "totalCountTextView2")),
+            TIMEOUT
+        )
+        val increment: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "incrementButton"
+            )
+        )
+        increment.click()
+        val changedText =
+            uiDevice.wait(
+                Until.findObject(By.res(packageName, "totalCountTextView2")),
+                TIMEOUT
+            )
+        Assert.assertEquals(changedText.text.toString(), "Number of results: 1")
+    }
+
+    @Test
+    fun test_OpenDetailsScreenAndDecrement() {
+        val toDetails: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "toDetailsActivityButton"
+            )
+        )
+        toDetails.click()
+        uiDevice.wait(
+            Until.findObject(By.res(packageName, "totalCountTextView2")),
+            TIMEOUT
+        )
+        val decrement: UiObject2 = uiDevice.findObject(
+            By.res(
+                packageName,
+                "decrementButton"
+            )
+        )
+        decrement.click()
+        val changedText =
+            uiDevice.wait(
+                Until.findObject(By.res(packageName, "totalCountTextView2")),
+                TIMEOUT
+            )
+        Assert.assertEquals(changedText.text.toString(), "Number of results: -1")
+    }
+
     companion object {
-        private const val TIMEOUT = 5000L
+        private const val TIMEOUT = 8000L
     }
 }
